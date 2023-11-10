@@ -12,6 +12,9 @@ namespace BLOG.Application
     {
         public static IServiceCollection AddApplicationLayer(this IServiceCollection services)
         {
+            //AutoMapper - dodanie wszystkich profili
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             return services;

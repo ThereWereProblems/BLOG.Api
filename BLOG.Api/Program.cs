@@ -61,7 +61,7 @@ try
         app.UseSwaggerUI();
     }
 
-    app.MapGroup("/api/account").MapIdentityApi<ApplicationUser>();
+    //app.MapGroup("/account").MapIdentityApi<ApplicationUser>();
 
     app.UseStaticFiles();
 
