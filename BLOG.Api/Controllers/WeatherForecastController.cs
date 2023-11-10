@@ -7,6 +7,7 @@ using BLOG.Application.Features.WeatherForecast.Queries;
 namespace BLOG.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase
     {

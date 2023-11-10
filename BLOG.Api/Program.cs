@@ -1,6 +1,11 @@
 using MediatR;
 using BLOG.Application;
 using BLOG.Infrastructure;
+using BLOG.Domain.Model.ApplicationUser;
+using BLOG.Infrastructure.Persistance;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +17,15 @@ builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
 
 try
 {
-    builder.Services.AddInfrastructureLayer();
+    builder.Services.AddInfrastructureLayer(builder.Configuration);
     builder.Services.AddApplicationLayer();
+
+    builder.Services.AddIdentityApiEndpoints<ApplicationUser>(options =>
+    {
+        options.Password.RequiredLength = 8;
+        options.Password.RequireNonAlphanumeric = false;
+    })
+        .AddEntityFrameworkStores<AppDbContext>();
 
     builder.Services.AddCors(options =>
     {
@@ -28,7 +40,17 @@ try
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey
+        });
+
+        options.OperationFilter<SecurityRequirementsOperationFilter>();
+    });
 
 
     var app = builder.Build();
@@ -38,6 +60,8 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+
+    app.MapGroup("/api/account").MapIdentityApi<ApplicationUser>();
 
     app.UseStaticFiles();
 
