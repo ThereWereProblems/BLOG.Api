@@ -22,6 +22,7 @@ namespace BLOG.Application.Features.AppUser.Commands
     public class AppUserRegisterCommandValidator : AbstractValidator<AppUserRegisterCommand>
     {
         private readonly AppDbContext _dbContext;
+
         public AppUserRegisterCommandValidator(AppDbContext context)
         {
             _dbContext = context;
