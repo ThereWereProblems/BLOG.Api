@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLOG.Application.Result;
 using BLOG.Domain.DTO;
 using BLOG.Domain.Model.ApplicationUser;
 using BLOG.Infrastructure.Persistance;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace BLOG.Application.Features.AppUser.Commands
 {
-    public class AppUserRegisterCommand : IRequest<bool>
+    public class AppUserRegisterCommand : IRequest<Result<bool>>
     {
         public RegisterAppUserDTO UserDTO { get; set; }
     }
@@ -27,22 +28,13 @@ namespace BLOG.Application.Features.AppUser.Commands
         {
             _dbContext = context;
 
-            //RuleFor(v => v.UserDTO.FirstName)
-            //    .NotEmpty().WithMessage("Imię jest wymagane");
-
-            //RuleFor(v => v.UserDTO.LastName)
-            //    .NotEmpty().WithMessage("Nazwisko jest wymagane");
-
-            //RuleFor(v => v.UserDTO.Email)
-            //    .NotEmpty().WithMessage("Email jest wymagany");
-
-            //RuleFor(v => v.UserDTO.Password)
-            //    .NotEmpty().WithMessage("Hasło jest wymagane")
-            //    .MinimumLength(8).WithMessage("Minimalna długość hasła wynosi 8 znaków");
+            RuleFor(v => v.UserDTO.Email)
+                .NotEmpty().WithMessage("Email jest wymagany!")
+                .EmailAddress().WithMessage("Podany Email jest nieprawidłowy!");
 
             RuleFor(v => v.UserDTO.NickName)
                 .MustAsync((model, nick, cancellationToken) => IsNickTaken(nick))
-                .WithMessage("Podany Nick jest już zajęty");
+                .WithMessage("Podany Nick jest już zajęty!");
         }
 
         private async Task<bool> IsNickTaken(string nick)
@@ -52,7 +44,7 @@ namespace BLOG.Application.Features.AppUser.Commands
         }
     }
 
-    public class AppUserRegisterCommandHandler : IRequestHandler<AppUserRegisterCommand, bool>
+    public class AppUserRegisterCommandHandler : IRequestHandler<AppUserRegisterCommand, Result<bool>>
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -68,15 +60,10 @@ namespace BLOG.Application.Features.AppUser.Commands
             _userStore = userStore;
         }
 
-        public async Task<bool> Handle(AppUserRegisterCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(AppUserRegisterCommand request, CancellationToken cancellationToken)
         {
             var emailStore = (IUserEmailStore<ApplicationUser>)_userStore;
             var email = request.UserDTO.Email;
-
-            //if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
-            //{
-            //    return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidEmail(email)));
-            //}
 
             var user = _mapper.Map<ApplicationUser>(request.UserDTO);
             await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
@@ -85,12 +72,12 @@ namespace BLOG.Application.Features.AppUser.Commands
 
             if (!result.Succeeded)
             {
-                return false;
-                //return CreateValidationProblem(result);
+                var errors = result.Errors.Select(x => new AppProblemDetail("", x.Description)).ToList();
+                return Result<bool>.Invalid(errors);
             }
 
             //await SendConfirmationEmailAsync(user, userManager, context, email);
-            return true;
+            return Result<bool>.Success(true);
         }
     }
 }

@@ -9,12 +9,8 @@ namespace BLOG.Api.Controllers
     [ApiController]
     [Authorize]
     [Route("api/[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController : ApiControllerBase
     {
-        private IMediator _mediator;
-
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
-
         /// <summary>
         /// Generuj pogodê
         /// </summary>
@@ -23,12 +19,7 @@ namespace BLOG.Api.Controllers
         [ProducesResponseType(typeof(List<WeatherForecast>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Get()
         {
-            var result = await Mediator.Send(new WeatherForecastGetQuery());
-
-            if (result == null)
-                return NoContent();
-            else
-                return Ok(result);
+            return HandleAppResult(await Mediator.Send(new WeatherForecastGetQuery()));
         }
 
         //private readonly ILogger<WeatherForecastController> _logger;

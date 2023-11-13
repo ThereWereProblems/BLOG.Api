@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLOG.Application.Result;
 using BLOG.Domain.Model.ApplicationUser;
 using FluentValidation;
 using MediatR;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BLOG.Application.Features.AppUser.Commands
 {
-    public class AppUserLoginCommand : IRequest<bool>
+    public class AppUserLoginCommand : IRequest<Result<bool>>
     {
         public LoginRequest Login { get; set; }
         public bool? useCookies { get; set; }
@@ -23,15 +24,16 @@ namespace BLOG.Application.Features.AppUser.Commands
     {
         public AppUserLoginCommandValidator()
         {
-            //RuleFor(v => v.LoginDTO.Email)
-            //    .NotEmpty().WithMessage("Email jest wymagany");
+            RuleFor(v => v.Login.Email)
+                .NotEmpty().WithMessage("Email jest wymagany!")
+                .EmailAddress().WithMessage("Podany Email jest nieprawidłowy!");
 
-            //RuleFor(v => v.LoginDTO.Password)
-            //    .NotEmpty().WithMessage("Hasło jest wymagane");
+            RuleFor(v => v.Login.Password)
+                .NotEmpty().WithMessage("Hasło jest wymagane");
         }
     }
 
-    public class AppUserLoginCommandHandler : IRequestHandler<AppUserLoginCommand, bool>
+    public class AppUserLoginCommandHandler : IRequestHandler<AppUserLoginCommand, Result<bool>>
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -44,7 +46,7 @@ namespace BLOG.Application.Features.AppUser.Commands
             _signInManager = signInManager;
         }
 
-        public async Task<bool> Handle(AppUserLoginCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(AppUserLoginCommand request, CancellationToken cancellationToken)
         {
 
             var useCookieScheme = (request.useCookies == true) || (request.useSessionCookies == true);
@@ -67,12 +69,11 @@ namespace BLOG.Application.Features.AppUser.Commands
 
             if (!result.Succeeded)
             {
-                //return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
+                return Result<bool>.Unauthorized();
             }
 
             // The signInManager already produced the needed response in the form of a cookie or bearer token.
-            //return TypedResults.Empty;
-            return true;
+            return Result<bool>.Success(true);
         }
     }
 }

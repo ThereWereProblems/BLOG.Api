@@ -11,12 +11,8 @@ namespace BLOG.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountController : ApiControllerBase
     {
-        private IMediator _mediator;
-
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
-
         /// <summary>
         /// Rejestruj użytkownika
         /// </summary>
@@ -26,12 +22,7 @@ namespace BLOG.Api.Controllers
         [ProducesResponseType(typeof(bool), StatusCodes.Status202Accepted)]
         public async Task<IActionResult> Register([FromBody] RegisterAppUserDTO dto)
         {
-            var result = await Mediator.Send(new AppUserRegisterCommand { UserDTO = dto });
-
-            if (result)
-                return Accepted();
-            else
-                return BadRequest();
+            return HandleAppResult( await Mediator.Send(new AppUserRegisterCommand { UserDTO = dto }));
         }
 
         /// <summary>
@@ -43,12 +34,7 @@ namespace BLOG.Api.Controllers
         [ProducesResponseType(typeof(bool), StatusCodes.Status202Accepted)]
         public async Task<IActionResult> Login([FromBody] LoginRequest dto, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies)
         {
-            var result = await Mediator.Send(new AppUserLoginCommand { Login = dto, useCookies = useCookies, useSessionCookies = useSessionCookies });
-
-            if (result)
-                return Accepted();
-            else
-                return BadRequest();
+            return HandleAppResult( await Mediator.Send(new AppUserLoginCommand { Login = dto, useCookies = useCookies, useSessionCookies = useSessionCookies }));
         }
     }
 }
