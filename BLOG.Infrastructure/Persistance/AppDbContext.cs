@@ -21,6 +21,8 @@ namespace BLOG.Infrastructure.Persistance
 
         }
 
+        public virtual DbSet<Domain.Model.Post.Post> Posts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

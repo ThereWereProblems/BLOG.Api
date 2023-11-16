@@ -9,11 +9,20 @@ namespace BLOG.Domain.DTO
 {
     public class RegisterAppUserDTO
     {
+        /// <summary>
+        /// Nazwa użykownika
+        /// </summary>
         [Required]
         public string NickName { get; set; }
+        /// <summary>
+        /// Email
+        /// </summary>
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+        /// <summary>
+        /// Hasło
+        /// </summary>
         [Required]
         public string Password { get; set; }
     }

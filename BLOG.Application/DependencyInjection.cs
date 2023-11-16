@@ -32,6 +32,9 @@ namespace BLOG.Application
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
 
+            //IHttpContextAccessor - do identyfikacji użytkowników
+            services.AddHttpContextAccessor();
+
             return services;
         }
     }
