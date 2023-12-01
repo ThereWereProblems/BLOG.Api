@@ -64,5 +64,12 @@ namespace BLOG.Api.Controllers
             return HandleAppResult(await Mediator.Send(new PostGetQuery { Id = id }));
         }
 
+        [HttpGet]
+        [Route("search")]
+        [ProducesResponseType(typeof(PostSearchResult), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Search([FromQuery] PostSearchQuery query) 
+        {
+            return HandleAppResult(await Mediator.Send(query));
+        }
     }
 }

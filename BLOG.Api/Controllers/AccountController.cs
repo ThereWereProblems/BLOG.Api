@@ -16,6 +16,7 @@ namespace BLOG.Api.Controllers
         /// <summary>
         /// Rejestruj użytkownika
         /// </summary>
+        /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("register")]
@@ -28,6 +29,9 @@ namespace BLOG.Api.Controllers
         /// <summary>
         /// Zaloguj się
         /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="useCookies"></param>
+        /// <param name="useSessionCookies"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("login")]
@@ -35,6 +39,19 @@ namespace BLOG.Api.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest dto, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies)
         {
             return HandleAppResult( await Mediator.Send(new AppUserLoginCommand { Login = dto, useCookies = useCookies, useSessionCookies = useSessionCookies }));
+        }
+
+        /// <summary>
+        /// Odśwież token
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("refresh")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status202Accepted)]
+        public async Task<IActionResult> Refresh([FromBody] RefreshRequest dto)
+        {
+            return HandleAppResult(await Mediator.Send(new AppUserRefreshCommand { Model = dto }));
         }
     }
 }

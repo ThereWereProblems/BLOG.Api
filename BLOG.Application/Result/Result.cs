@@ -45,6 +45,7 @@ namespace BLOG.Application.Result
         public static Result<T> Error(string simpleErrorDetail) => new(AppProblems.Error, new AppProblemDetail("", simpleErrorDetail));
         public static Result<T> Error(AppProblemDetail error) => new(AppProblems.Error, error);
         public static Result<T> Invalid(List<AppProblemDetail> errors) => new(AppProblems.Invalid) { Errors = errors };
+        public static Result<T> Invalid(string message) => new(AppProblems.Invalid, new AppProblemDetail("", message));
         public static Result<T> NotFound() => new(AppProblems.NotFound);
         public static Result<T> Forbidden() => new(AppProblems.Forbidden);
         public static Result<T> Unauthorized() => new(AppProblems.Unathorized);
