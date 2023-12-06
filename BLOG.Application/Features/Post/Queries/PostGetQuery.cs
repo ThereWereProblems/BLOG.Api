@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using BLOG.Application.Common.Abstractions;
 using BLOG.Application.Features.Post.Commands;
 using BLOG.Application.Result;
 using BLOG.Domain.DTO;
 using BLOG.Domain.Model.ApplicationUser;
 using BLOG.Domain.ReadModel;
-using BLOG.Infrastructure.Persistance;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -29,9 +29,9 @@ namespace BLOG.Application.Features.Post.Queries
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
+        private readonly IApplicationDbContext _context;
 
-        public PostGetQueryHandler(IMediator mediator, IMapper mapper, AppDbContext appDbContext)
+        public PostGetQueryHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext)
         {
             _mediator = mediator;
             _mapper = mapper;

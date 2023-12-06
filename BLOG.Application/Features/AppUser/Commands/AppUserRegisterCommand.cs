@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using BLOG.Application.Common.Abstractions;
 using BLOG.Application.Result;
 using BLOG.Domain.DTO;
 using BLOG.Domain.Model.ApplicationUser;
-using BLOG.Infrastructure.Persistance;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -22,9 +22,9 @@ namespace BLOG.Application.Features.AppUser.Commands
 
     public class AppUserRegisterCommandValidator : AbstractValidator<AppUserRegisterCommand>
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IApplicationDbContext _dbContext;
 
-        public AppUserRegisterCommandValidator(AppDbContext context)
+        public AppUserRegisterCommandValidator(IApplicationDbContext context)
         {
             _dbContext = context;
 

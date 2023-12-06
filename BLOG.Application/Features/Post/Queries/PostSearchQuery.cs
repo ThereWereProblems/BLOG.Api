@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using BLOG.Application.Common.Abstractions;
 using BLOG.Application.Result;
 using BLOG.Application.Wrappers;
 using BLOG.Domain.Model.Post;
 using BLOG.Domain.ReadModel;
-using BLOG.Infrastructure.Persistance;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,9 +23,9 @@ namespace BLOG.Application.Features.Post.Queries
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
+        private readonly IApplicationDbContext _context;
 
-        public PostSearchQueryHandler(IMediator mediator, IMapper mapper, AppDbContext appDbContext)
+        public PostSearchQueryHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext)
         {
             _mediator = mediator;
             _mapper = mapper;

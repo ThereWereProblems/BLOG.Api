@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using BLOG.Application.Common.Abstractions;
 using BLOG.Application.Result;
 using BLOG.Domain.DTO;
 using BLOG.Domain.Model.ApplicationUser;
-using BLOG.Infrastructure.Persistance;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -45,11 +45,11 @@ namespace BLOG.Application.Features.Post.Commands
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
+        private readonly IApplicationDbContext _context;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public PostUpdateCommandHandler(IMediator mediator, IMapper mapper, AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
+        public PostUpdateCommandHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
         {
             _mediator = mediator;
             _mapper = mapper;

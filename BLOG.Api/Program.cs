@@ -6,6 +6,7 @@ using BLOG.Infrastructure.Persistance;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Identity;
+using BLOG.Api.Setups;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,9 @@ try
         options.Password.RequiredLength = 8;
         options.Password.RequireNonAlphanumeric = false;
     })
-        .AddEntityFrameworkStores<AppDbContext>();
+        .AddEntityFrameworkStores<ApplicationDbContext>();
+
+    //builder.Services.AddCache(builder.Configuration);
 
     builder.Services.AddCors(options =>
     {
