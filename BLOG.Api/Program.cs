@@ -28,7 +28,7 @@ try
     })
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
-    //builder.Services.AddCache(builder.Configuration);
+    builder.Services.AddCache(builder.Configuration);
 
     builder.Services.AddCors(options =>
     {

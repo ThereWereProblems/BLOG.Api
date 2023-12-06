@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLOG.Application.Caching;
 using BLOG.Application.Common.Abstractions;
 using BLOG.Application.Result;
 using BLOG.Application.Wrappers;
@@ -14,9 +15,11 @@ using System.Threading.Tasks;
 
 namespace BLOG.Application.Features.Post.Queries
 {
-    public class PostSearchQuery : BaseQuery<Result<PagedList<PostSearchResult>>>
+    public class PostSearchQuery : BaseCacheableQuery<Result<PagedList<PostSearchResult>>>
     {
+        public override string CacheKey => $"{nameof(PostSearchQuery)}_{PageIndex}_{PageSize}";
 
+        public override string CacheGroup => $"{nameof(Domain.Model.Post.Post)}";
     }
 
     public class PostSearchQueryHandler : IRequestHandler<PostSearchQuery, Result<PagedList<PostSearchResult>>>

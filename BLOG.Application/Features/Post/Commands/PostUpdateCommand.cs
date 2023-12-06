@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLOG.Application.Caching;
 using BLOG.Application.Common.Abstractions;
 using BLOG.Application.Result;
 using BLOG.Domain.DTO;
@@ -15,10 +16,13 @@ using System.Threading.Tasks;
 
 namespace BLOG.Application.Features.Post.Commands
 {
-    public class PostUpdateCommand : IRequest<Result<bool>>
+    public class PostUpdateCommand : IRequest<Result<bool>>, ICacheCleanCommand
     {
         public int Id { get; set; }
+
         public CreatePostDTO PostDTO { get; set; }
+
+        public string CacheGroup => $"{nameof(Domain.Model.Post.Post)}";
     }
 
     public class PostUpdateCommandValidator : AbstractValidator<PostUpdateCommand>
