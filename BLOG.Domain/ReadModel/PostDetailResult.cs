@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLOG.Domain.Model.Post
+namespace BLOG.Domain.ReadModel
 {
-    public class Post
+    public class PostDetailResult
     {
         /// <summary>
         /// Klucz
@@ -27,16 +27,14 @@ namespace BLOG.Domain.Model.Post
         /// <summary>
         /// Nazwa zdjęcia na miniaturkę
         /// </summary>
-        public string Image{ get; set; }
+        public string Image { get; set; }
         /// <summary>
         /// Data publikacji
         /// </summary>
         public DateTime PublishedAt { get; set; }
         /// <summary>
-        /// Klucz do użytkownika tworzącego
+        /// Osoba publikująca
         /// </summary>
-        public string? UserId { get; set; }
-
-        public virtual Domain.Model.ApplicationUser.ApplicationUser User { get; set; }
+        public string Author { get; set; }
     }
 }

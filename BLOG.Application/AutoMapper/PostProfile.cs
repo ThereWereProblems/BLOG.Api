@@ -14,7 +14,8 @@ namespace BLOG.Application.AutoMapper
         public PostProfile()
         {
             CreateMap<CreatePostDTO, Domain.Model.Post.Post>();
-            CreateMap<Domain.Model.Post.Post,PostSearchResult>().ForMember(x => x.Author,  v => v.MapFrom( s => s.User.NickName));
+            CreateMap<Domain.Model.Post.Post, PostSearchResult>().ForMember(x => x.Author, v => v.MapFrom(s => s.User.NickName));
+            CreateMap<Domain.Model.Post.Post, PostDetailResult>().ForMember(x => x.Author, v => v.MapFrom(s => s.User.NickName));
         }
     }
 }

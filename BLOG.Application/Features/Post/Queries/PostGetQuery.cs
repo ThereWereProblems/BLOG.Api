@@ -18,14 +18,14 @@ using System.Threading.Tasks;
 
 namespace BLOG.Application.Features.Post.Queries
 {
-    public class PostGetQuery : IRequest<Result<PostSearchResult>>
+    public class PostGetQuery : IRequest<Result<PostDetailResult>>
     {
         public int Id { get; set; }
     }
 
     
 
-    public class PostGetQueryHandler : IRequestHandler<PostGetQuery, Result<PostSearchResult>>
+    public class PostGetQueryHandler : IRequestHandler<PostGetQuery, Result<PostDetailResult>>
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -38,18 +38,18 @@ namespace BLOG.Application.Features.Post.Queries
             _context = appDbContext;
         }
 
-        public async Task<Result<PostSearchResult>> Handle(PostGetQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PostDetailResult>> Handle(PostGetQuery request, CancellationToken cancellationToken)
         {
             var entry = _context.Posts.Include(v => v.User).FirstOrDefault(x => x.Id == request.Id);
 
             if (entry == null)
             {
-                return Result<PostSearchResult>.NotFound();
+                return Result<PostDetailResult>.NotFound();
             }
 
-            var result = _mapper.Map<Domain.ReadModel.PostSearchResult>(entry);
+            var result = _mapper.Map<Domain.ReadModel.PostDetailResult>(entry);
 
-            return Result<PostSearchResult>.Success(result);
+            return Result<PostDetailResult>.Success(result);
         }
     }
 }

@@ -13,6 +13,8 @@ namespace BLOG.Infrastructure.Caching
 {
     public static class MemoryCacheExtensions
     {
+        // https://stackoverflow.com/questions/45597057/how-to-retrieve-a-list-of-memory-cache-keys-in-asp-net-core
+
         #region Microsoft.Extensions.Caching.Memory_6_OR_OLDER
 
         private static readonly Lazy<Func<MemoryCache, object>> GetEntries6 =

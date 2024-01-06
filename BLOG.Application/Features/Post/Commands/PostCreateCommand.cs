@@ -17,9 +17,10 @@ using System.Threading.Tasks;
 
 namespace BLOG.Application.Features.Post.Commands
 {
-    public class PostCreateCommand : IRequest<Result<bool>>, ICacheCleanCommand
+    public class PostCreateCommand : IRequest<Result<int>>, ICacheCleanCommand
     {
         public CreatePostDTO PostDTO { get; set; }
+        public IFormFile File { get; set; }
 
         public string CacheGroup => $"{nameof(Domain.Model.Post.Post)}";
 
@@ -39,10 +40,13 @@ namespace BLOG.Application.Features.Post.Commands
 
             RuleFor(v => v.PostDTO.Content)
                 .NotEmpty().WithMessage("Treść artykułu jest wymagana");
+
+            RuleFor(v => v.File)
+                .NotNull().WithMessage("Zdjęcie jest wymagane");
         }
     }
 
-    public class PostCreateCommandHandler : IRequestHandler<PostCreateCommand, Result<bool>>
+    public class PostCreateCommandHandler : IRequestHandler<PostCreateCommand, Result<int>>
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -59,7 +63,7 @@ namespace BLOG.Application.Features.Post.Commands
             _userManager = userManager;
         }
 
-        public async Task<Result<bool>> Handle(PostCreateCommand request, CancellationToken cancellationToken)
+        public async Task<Result<int>> Handle(PostCreateCommand request, CancellationToken cancellationToken)
         {
             var entry = _mapper.Map<Domain.Model.Post.Post>(request.PostDTO);
 
@@ -68,10 +72,24 @@ namespace BLOG.Application.Features.Post.Commands
             entry.UserId = user.Id;
             entry.PublishedAt = DateTime.Now;
 
+            // zapis zdjęcia
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(request.File.FileName);        
+            if (request.File != null && request.File.Length > 0)
+            {
+                if (!System.IO.Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images")))
+                    System.IO.Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images"));
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.File.CopyToAsync(fileStream);
+                }
+            }
+            entry.Image = fileName;
+
             await _context.Posts.AddAsync(entry);
             await _context.SaveChangesAsync();
             
-            return Result<bool>.Success(true);
+            return Result<int>.Success(entry.Id);
         }
     }
 }

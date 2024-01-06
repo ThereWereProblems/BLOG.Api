@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Identity;
 using BLOG.Api.Setups;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,10 @@ builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
 
 try
 {
+    builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+        loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
+
+
     builder.Services.AddInfrastructureLayer(builder.Configuration);
     builder.Services.AddApplicationLayer();
 
@@ -61,6 +66,8 @@ try
 
     var app = builder.Build();
 
+    app.UseSerilogRequestLogging();
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
@@ -78,8 +85,6 @@ try
     app.UseAuthorization();
 
     app.MapControllers();
-
-    //var mediator = app.Services.GetRequiredService<IMediator>();
 
     app.Run();
 
