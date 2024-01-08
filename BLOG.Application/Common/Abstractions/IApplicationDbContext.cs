@@ -10,6 +10,7 @@ namespace BLOG.Application.Common.Abstractions
 {
     public interface IApplicationDbContext
     {
+        DbSet<Domain.Model.AuditLog.AuditLog> AuditLogs { get; set; }
         DbSet<ApplicationUser> Users { get; set; }
         DbSet<Domain.Model.Post.Post> Posts { get; set; }
 

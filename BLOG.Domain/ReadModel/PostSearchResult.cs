@@ -21,9 +21,9 @@ namespace BLOG.Domain.ReadModel
         /// </summary>
         public string Description { get; set; }
         /// <summary>
-        /// Treść
+        /// Nazwa zdjęcia na miniaturkę
         /// </summary>
-        public string Content { get; set; }
+        public string Image { get; set; }
         /// <summary>
         /// Data publikacji
         /// </summary>

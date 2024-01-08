@@ -1,5 +1,6 @@
 ﻿using BLOG.Application.Common.Abstractions;
 using BLOG.Infrastructure.Persistance;
+using BLOG.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,9 @@ namespace BLOG.Infrastructure
     {
         public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped(typeof(ICurentUserService), typeof(CurentUserService));
             services.AddScoped(typeof(IApplicationDbContext), typeof(ApplicationDbContext));
+
             services.AddDbContextFactory<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DbCennection"));

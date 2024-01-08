@@ -90,8 +90,7 @@ try
 
     return 0;
 }
-catch (Exception)
+catch (Exception e)
 {
-
     return 1;
 }

@@ -52,7 +52,7 @@ namespace BLOG.Application.Features.Post.Queries
             pager.TotalPages = (int)Math.Ceiling((double)pager.TotalRecords / (double)request.PageSize);
 
 
-            IQueryable<Domain.Model.Post.Post> query = _context.Posts.Include(x => x.User);
+            IQueryable<Domain.Model.Post.Post> query = _context.Posts.Include(x => x.User).OrderByDescending(x => x.PublishedAt);
             var pagedList = query.Skip(pager.PageSize * (pager.PageIndex - 1)).Take(pager.PageSize).ToList();
 
             var result = pagedList.Select(x => _mapper.Map<PostSearchResult>(x)).ToList();

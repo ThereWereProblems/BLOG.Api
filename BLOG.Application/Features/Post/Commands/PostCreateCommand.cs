@@ -51,25 +51,21 @@ namespace BLOG.Application.Features.Post.Commands
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly IApplicationDbContext _context;
-        private readonly IHttpContextAccessor _contextAccessor;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICurentUserService _userService;
 
-        public PostCreateCommandHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
+        public PostCreateCommandHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext, ICurentUserService curentUserService)
         {
             _mediator = mediator;
             _mapper = mapper;
             _context = appDbContext;
-            _contextAccessor = httpContextAccessor;
-            _userManager = userManager;
+            _userService = curentUserService;
         }
 
         public async Task<Result<int>> Handle(PostCreateCommand request, CancellationToken cancellationToken)
         {
             var entry = _mapper.Map<Domain.Model.Post.Post>(request.PostDTO);
 
-            var user = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
-
-            entry.UserId = user.Id;
+            entry.UserId = _userService.UserId;
             entry.PublishedAt = DateTime.Now;
 
             // zapis zdjęcia
