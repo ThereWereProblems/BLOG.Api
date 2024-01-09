@@ -32,6 +32,7 @@ namespace BLOG.Infrastructure.Persistance
         }
 
         public virtual DbSet<Domain.Model.AuditLog.AuditLog> AuditLogs { get; set; }
+        public virtual DbSet<Domain.Model.Comment.Comment> Comments { get; set; }
         public virtual DbSet<Domain.Model.Post.Post> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

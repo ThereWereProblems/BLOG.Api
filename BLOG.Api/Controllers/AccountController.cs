@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using BLOG.Application.Features.WeatherForecast.Queries;
 using Microsoft.AspNetCore.Identity.Data;
 using BLOG.Domain.DTO;
 using BLOG.Application.Features.AppUser.Commands;

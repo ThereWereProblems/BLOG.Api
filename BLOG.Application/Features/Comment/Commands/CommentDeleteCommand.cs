@@ -2,44 +2,40 @@
 using BLOG.Application.Caching;
 using BLOG.Application.Common.Abstractions;
 using BLOG.Application.Result;
-using BLOG.Domain.DTO;
-using BLOG.Domain.Model.ApplicationUser;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLOG.Application.Features.Post.Commands
+namespace BLOG.Application.Features.Comment.Commands
 {
-    public class PostDeleteCommand : IRequest<Result<bool>>, ICacheCleanCommand
+    public class CommentDeleteCommand : IRequest<Result<bool>>, ICacheCleanCommand
     {
         public int Id { get; set; }
 
-        public string CacheGroup => $"{nameof(Domain.Model.Post.Post)}";
+        public string CacheGroup => $"{nameof(Domain.Model.Comment.Comment)}";
     }
 
-    public class PostDeleteCommandValidator : AbstractValidator<PostDeleteCommand>
+    public class CommentDeleteCommandValidator : AbstractValidator<CommentDeleteCommand>
     {
-        public PostDeleteCommandValidator()
+        public CommentDeleteCommandValidator()
         {
             RuleFor(v => v.Id)
            .NotEmpty().WithMessage("Id jest wymagane!");
         }
     }
 
-    public class PostDeleteCommandHandler : IRequestHandler<PostDeleteCommand, Result<bool>>
+    public class CommentDeleteCommandHandler : IRequestHandler<CommentDeleteCommand, Result<bool>>
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly IApplicationDbContext _context;
         private readonly ICurentUserService _userService;
 
-        public PostDeleteCommandHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext, ICurentUserService userService)
+        public CommentDeleteCommandHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext, ICurentUserService userService)
         {
             _mediator = mediator;
             _mapper = mapper;
@@ -47,9 +43,9 @@ namespace BLOG.Application.Features.Post.Commands
             _userService = userService;
         }
 
-        public async Task<Result<bool>> Handle(PostDeleteCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(CommentDeleteCommand request, CancellationToken cancellationToken)
         {
-            var entry = _context.Posts.FirstOrDefault(x => x.Id == request.Id);
+            var entry = _context.Comments.FirstOrDefault(x => x.Id == request.Id);
 
             if (entry == null)
                 return Result<bool>.NotFound();
@@ -57,7 +53,7 @@ namespace BLOG.Application.Features.Post.Commands
             if (entry.UserId != _userService.UserId)
                 return Result<bool>.Forbidden();
 
-            _context.Posts.Remove(entry);
+            _context.Comments.Remove(entry);
             await _context.SaveChangesAsync();
 
             return Result<bool>.Success(true);

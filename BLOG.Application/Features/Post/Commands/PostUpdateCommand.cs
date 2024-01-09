@@ -50,12 +50,14 @@ namespace BLOG.Application.Features.Post.Commands
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly IApplicationDbContext _context;
+        private readonly ICurentUserService _userService;
 
-        public PostUpdateCommandHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext)
+        public PostUpdateCommandHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext, ICurentUserService userService)
         {
             _mediator = mediator;
             _mapper = mapper;
             _context = appDbContext;
+            _userService = userService;
         }
 
         public async Task<Result<bool>> Handle(PostUpdateCommand request, CancellationToken cancellationToken)
@@ -64,6 +66,9 @@ namespace BLOG.Application.Features.Post.Commands
 
             if (entry == null)
                 return Result<bool>.NotFound();
+
+            if(entry.UserId != _userService.UserId)
+                return Result<bool>.Forbidden();
 
             entry.Title = request.PostDTO.Title;
             entry.Description = request.PostDTO.Description;

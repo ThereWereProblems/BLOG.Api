@@ -38,5 +38,6 @@ namespace BLOG.Domain.Model.Post
         public string? UserId { get; set; }
 
         public virtual Domain.Model.ApplicationUser.ApplicationUser User { get; set; }
+        public virtual ICollection<Domain.Model.Comment.Comment> Comments { get; set; }
     }
 }

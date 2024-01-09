@@ -1,29 +1,24 @@
 ﻿using AutoMapper;
 using BLOG.Application.Common.Abstractions;
-using BLOG.Application.Features.Post.Commands;
-using BLOG.Application.Features.Post.Queries;
 using BLOG.Application.Result;
-using BLOG.Domain.ReadModel;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace BLOG.Application.Features.Post.Queries
+namespace BLOG.Application.Features.File.Queries
 {
-    public class PostGetImageQuery : IRequest<Result<FileStream>>
+    public class ImageGetQuery : IRequest<Result<FileStream>>
     {
         public string FileName { get; set; }
     }
 
-    public class PostGetImageQueryValidator : AbstractValidator<PostGetImageQuery>
+    public class ImageGetQueryValidator : AbstractValidator<ImageGetQuery>
     {
-        public PostGetImageQueryValidator()
+        public ImageGetQueryValidator()
         {
             RuleFor(v => v.FileName)
                 .NotNull()
@@ -31,23 +26,23 @@ namespace BLOG.Application.Features.Post.Queries
         }
     }
 
-    public class PostGetImageQueryHandler : IRequestHandler<PostGetImageQuery, Result<FileStream>>
+    public class ImageGetQueryHandler : IRequestHandler<ImageGetQuery, Result<FileStream>>
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly IApplicationDbContext _context;
 
-        public PostGetImageQueryHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext)
+        public ImageGetQueryHandler(IMediator mediator, IMapper mapper, IApplicationDbContext appDbContext)
         {
             _mediator = mediator;
             _mapper = mapper;
             _context = appDbContext;
         }
 
-        public async Task<Result<FileStream>> Handle(PostGetImageQuery request, CancellationToken cancellationToken)
+        public async Task<Result<FileStream>> Handle(ImageGetQuery request, CancellationToken cancellationToken)
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", request.FileName);
-            
+
             if (!System.IO.File.Exists(path))
                 return Result<FileStream>.NotFound();
 

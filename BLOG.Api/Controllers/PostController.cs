@@ -19,6 +19,7 @@ namespace BLOG.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         [Route("create")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status201Created)]
         public async Task<IActionResult> Create([FromForm] string model, [FromForm] IFormFile file)
@@ -33,6 +34,7 @@ namespace BLOG.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut]
+        [Authorize]
         [Route("update/{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CreatePostDTO dto)
@@ -46,6 +48,7 @@ namespace BLOG.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
+        [Authorize]
         [Route("delete/{id}")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Delete([FromRoute] int id)
@@ -77,22 +80,6 @@ namespace BLOG.Api.Controllers
         public async Task<IActionResult> Search([FromQuery] PostSearchQuery query)
         {
             return HandleAppResult(await Mediator.Send(query));
-        }
-
-        /// <summary>
-        /// Pobierz zdjęcie z wpisu jakio base64
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("image/{name}")]
-        [ProducesResponseType(typeof(File), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetImage([FromRoute] string name)
-        {
-            var result = await Mediator.Send(new PostGetImageQuery { FileName = name });
-            if (!result.IsSuccess)
-                return NotFound();
-            return File(result, "image/*");
         }
     }
 }
