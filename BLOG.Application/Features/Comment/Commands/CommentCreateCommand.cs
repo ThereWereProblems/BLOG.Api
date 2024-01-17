@@ -19,7 +19,7 @@ namespace BLOG.Application.Features.Comment.Commands
     {
         public CreateCommentDTO CommentDTO { get; set; }
 
-        public string CacheGroup => $"{nameof(Domain.Model.Comment.Comment)}_{CommentDTO.PostId}";
+        public string CacheGroup => $"{nameof(Domain.Model.Comment.Comment)}";
     }
 
     public class CommentCreateCommandValidator : AbstractValidator<CommentCreateCommand>
