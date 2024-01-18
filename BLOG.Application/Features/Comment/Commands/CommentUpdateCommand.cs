@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLOG.Application.Caching;
 using BLOG.Application.Common.Abstractions;
+using BLOG.Application.Features.Comment.Events;
 using BLOG.Application.Result;
 using BLOG.Domain.DTO;
 using FluentValidation;
@@ -64,6 +65,8 @@ namespace BLOG.Application.Features.Comment.Commands
 
             _context.Comments.Update(entry);
             await _context.SaveChangesAsync();
+
+            await _mediator.Publish(new CommentChangedEvent { PostId = entry.PostId });
 
             return Result<bool>.Success(true);
         }

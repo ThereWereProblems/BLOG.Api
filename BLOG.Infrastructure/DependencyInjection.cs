@@ -16,6 +16,7 @@ namespace BLOG.Infrastructure
     {
         public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped(typeof(ICommunicationServiceClient), typeof(CommunicationServiceClient));
             services.AddScoped(typeof(ICurentUserService), typeof(CurentUserService));
             services.AddScoped(typeof(IApplicationDbContext), typeof(ApplicationDbContext));
 

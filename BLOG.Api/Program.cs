@@ -8,6 +8,7 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Identity;
 using BLOG.Api.Setups;
 using Serilog;
+using BLOG.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +64,8 @@ try
         options.OperationFilter<SecurityRequirementsOperationFilter>();
     });
 
+    // Dodanie SignalR
+    builder.Services.AddSignalR();
 
     var app = builder.Build();
 
@@ -79,6 +82,8 @@ try
     app.UseStaticFiles();
 
     app.UseCors("CorsPolicy");
+
+    app.MapHub<CommunicationServiceClient>("/signalrhub");
 
     app.UseRouting();
 
