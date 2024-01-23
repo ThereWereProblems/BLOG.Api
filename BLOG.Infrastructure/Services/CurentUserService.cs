@@ -29,6 +29,9 @@ namespace BLOG.Infrastructure.Services
         }
         private async Task<string?> GetUserIdAsync()
         {
+            if(_contextAccessor.HttpContext == null) //ApplicationDbContextSeed
+                return null;
+
             var user = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
 
             if (user is null)

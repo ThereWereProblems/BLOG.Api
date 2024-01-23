@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using BLOG.Api.Setups;
 using Serilog;
 using BLOG.Infrastructure.Services;
+using Microsoft.Extensions.Logging;
+using BLOG.Application.Common.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,7 @@ try
         options.Password.RequiredLength = 8;
         options.Password.RequireNonAlphanumeric = false;
     })
+        .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
     builder.Services.AddCache(builder.Configuration);
@@ -46,9 +49,9 @@ try
     });
 
     builder.Services.AddControllers();
-        //.AddNewtonsoftJson(options =>
-        //    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-        //);
+    //.AddNewtonsoftJson(options =>
+    //    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    //);
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -70,6 +73,8 @@ try
     var app = builder.Build();
 
     app.UseSerilogRequestLogging();
+
+    await ApplicationDbContextSeed.SeedAsync(app);
 
     if (app.Environment.IsDevelopment())
     {

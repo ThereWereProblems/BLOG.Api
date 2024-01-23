@@ -1,6 +1,8 @@
 ﻿using BLOG.Application.Common.Abstractions;
+using BLOG.Domain.Model.ApplicationUser;
 using BLOG.Infrastructure.Persistance;
 using BLOG.Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

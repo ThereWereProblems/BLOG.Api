@@ -59,7 +59,7 @@ namespace BLOG.Application.Features.Comment.Queries
             }
 
             var pager = new DataPager(request.PageIndex, request.PageSize);
-            pager.TotalRecords = await _context.Comments.CountAsync(cancellationToken);
+            pager.TotalRecords = await _context.Comments.Where(x => x.PostId == request.PostId).CountAsync(cancellationToken);
             pager.TotalPages = (int)Math.Ceiling((double)pager.TotalRecords / (double)request.PageSize);
 
 
