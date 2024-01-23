@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,11 +23,18 @@ namespace BLOG.Infrastructure.Services
         }
 
         public string UserId => GetUserId();
+        public ClaimsPrincipal ClaimsPrincipal => GetClaimsPrincipal();
 
         private string? GetUserId()
         {
             return GetUserIdAsync().Result;
         }
+
+        private ClaimsPrincipal? GetClaimsPrincipal()
+        {
+            return GetClaimsPrincipalAsync().Result;
+        }
+
         private async Task<string?> GetUserIdAsync()
         {
             if(_contextAccessor.HttpContext == null) //ApplicationDbContextSeed
@@ -38,6 +46,14 @@ namespace BLOG.Infrastructure.Services
                 return null;
 
             return user?.Id;
+        }
+
+        private async Task<ClaimsPrincipal?> GetClaimsPrincipalAsync()
+        {
+            if (_contextAccessor.HttpContext == null) //ApplicationDbContextSeed
+                return null;
+
+            return _contextAccessor.HttpContext.User;
         }
     }
 }

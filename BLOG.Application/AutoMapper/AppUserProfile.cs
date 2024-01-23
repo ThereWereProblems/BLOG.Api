@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLOG.Domain.DTO;
 using BLOG.Domain.Model.ApplicationUser;
+using BLOG.Domain.ReadModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace BLOG.Application.AutoMapper
         public AppUserProfile()
         {
             CreateMap<RegisterAppUserDTO, ApplicationUser>();
+            CreateMap<ApplicationUser, UserInfoResult>();
         }
     }
 }

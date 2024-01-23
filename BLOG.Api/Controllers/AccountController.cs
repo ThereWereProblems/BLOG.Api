@@ -1,10 +1,11 @@
-﻿using BLOG.Domain.Model.WeatherForecast;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity.Data;
 using BLOG.Domain.DTO;
 using BLOG.Application.Features.AppUser.Commands;
+using BLOG.Domain.ReadModel;
+using BLOG.Application.Features.AppUser.Queries;
 
 namespace BLOG.Api.Controllers
 {
@@ -51,6 +52,19 @@ namespace BLOG.Api.Controllers
         public async Task<IActionResult> Refresh([FromBody] RefreshRequest dto)
         {
             return HandleAppResult(await Mediator.Send(new AppUserRefreshCommand { Model = dto }));
+        }
+
+        /// <summary>
+        /// Pobierz informacje o użytkowniku
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        [Route("userinfo")]
+        [ProducesResponseType(typeof(UserInfoResult), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            return HandleAppResult(await Mediator.Send(new AppUserGetInfoQuery()));
         }
     }
 }
