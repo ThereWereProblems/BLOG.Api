@@ -40,11 +40,7 @@ namespace BLOG.Application.Features.AppUser.Queries
         {
             var userId = _userService.UserId;
 
-            var user = _userService.ClaimsPrincipal;
-            var userIdentity = (ClaimsIdentity)user.Identity;
-            var claims = userIdentity.Claims;
-            var roleClaimType = userIdentity.RoleClaimType;
-            var roles = claims.Where(c => c.Type == ClaimTypes.Role).Select(x => x.Value).ToList();
+            var roles = _userService.Roles;
 
             var result = _mapper.Map<UserInfoResult>(await _context.Users.FirstOrDefaultAsync(x => x.Id == userId));
             result.Roles = roles;

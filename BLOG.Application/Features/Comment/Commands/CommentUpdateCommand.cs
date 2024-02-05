@@ -58,7 +58,7 @@ namespace BLOG.Application.Features.Comment.Commands
             if (entry == null)
                 return Result<bool>.NotFound();
 
-            if (entry.UserId != _userService.UserId)
+            if (!(entry.UserId == _userService.UserId || _userService.IsAdmin))
                 return Result<bool>.Forbidden();
 
             entry.Content = request.CommentDTO.Content;

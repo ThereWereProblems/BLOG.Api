@@ -22,6 +22,9 @@ namespace BLOG.Infrastructure
             services.AddScoped(typeof(ICurentUserService), typeof(CurentUserService));
             services.AddScoped(typeof(IApplicationDbContext), typeof(ApplicationDbContext));
 
+            //lazy loading
+            services.AddScoped<Lazy<ICurentUserService>>(provider => new Lazy<ICurentUserService>(() => provider.GetRequiredService<ICurentUserService>()));
+
             services.AddDbContextFactory<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DbCennection"));

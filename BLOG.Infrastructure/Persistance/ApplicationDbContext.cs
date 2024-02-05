@@ -19,16 +19,24 @@ namespace BLOG.Infrastructure.Persistance
     {
         private readonly Lazy<ICurentUserService> _userService;
 
-        public ApplicationDbContext(IServiceProvider serviceProvider) : base()
+        public ApplicationDbContext() : base()
         {
-            _userService = new Lazy<ICurentUserService>(() =>
-                serviceProvider.GetRequiredService<ICurentUserService>()); // jeśli damy bezpośrednio - A circular dependency was detected
+
         }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IServiceProvider serviceProvider) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            _userService = new Lazy<ICurentUserService>(() =>
-                serviceProvider.GetRequiredService<ICurentUserService>()); // jeśli damy bezpośrednio - A circular dependency was detected
+
+        }
+
+        public ApplicationDbContext(Lazy<ICurentUserService> userService) : base()
+        {
+            _userService = userService; // jeśli damy bezpośrednio - A circular dependency was detected
+        }
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, Lazy<ICurentUserService> userService) : base(options)
+        {
+            _userService = userService; // jeśli damy bezpośrednio - A circular dependency was detected
         }
 
         public virtual DbSet<Domain.Model.AuditLog.AuditLog> AuditLogs { get; set; }

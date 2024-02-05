@@ -51,7 +51,6 @@ namespace BLOG.Application.Features.AppUser.Commands
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
 
-
         public AppUserRegisterCommandHandler(IMediator mediator, IMapper mapper, UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore)
         {
             _mediator = mediator;
@@ -75,6 +74,8 @@ namespace BLOG.Application.Features.AppUser.Commands
                 var errors = result.Errors.Select(x => new AppProblemDetail("", x.Description)).ToList();
                 return Result<bool>.Invalid(errors);
             }
+
+            _userManager.AddToRoleAsync(user, "Member");
 
             //await SendConfirmationEmailAsync(user, userManager, context, email);
             return Result<bool>.Success(true);

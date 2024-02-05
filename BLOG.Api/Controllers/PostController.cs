@@ -14,7 +14,7 @@ namespace BLOG.Api.Controllers
     public class PostController : ApiControllerBase
     {
         /// <summary>
-        /// Utwóż nowy post
+        /// Utwórz nowy post
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>

@@ -15,8 +15,13 @@ namespace BLOG.Application.Common.Abstractions
         string UserId { get; }
 
         /// <summary>
-        /// ClaimsPrincipal
+        /// Czy użytkownik jest adminem
         /// </summary>
-        ClaimsPrincipal ClaimsPrincipal { get; }
+        bool IsAdmin { get; }
+
+        /// <summary>
+        /// Lista roli użytkownika
+        /// </summary>
+        List<string> Roles { get; }
     }
 }

@@ -2,6 +2,7 @@
 using BLOG.Application.Caching;
 using BLOG.Application.Common.Abstractions;
 using BLOG.Application.Features.AppUser.Commands;
+using BLOG.Application.Features.File.Commands;
 using BLOG.Application.Result;
 using BLOG.Domain.DTO;
 using BLOG.Domain.Model.ApplicationUser;
@@ -69,18 +70,12 @@ namespace BLOG.Application.Features.Post.Commands
             entry.PublishedAt = DateTime.Now;
 
             // zapis zdjęcia
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(request.File.FileName);        
-            if (request.File != null && request.File.Length > 0)
-            {
-                if (!System.IO.Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images")))
-                    System.IO.Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images"));
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", fileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await request.File.CopyToAsync(fileStream);
-                }
-            }
-            entry.Image = fileName;
+            var result = await _mediator.Send(new ImageCreateCommand { File = request.File });
+
+            if (!result.IsSuccess)
+                return Result<int>.Invalid("Błąd podczas zapisywania zdjęcia!");
+
+            entry.Image = result.Value!;
 
             await _context.Posts.AddAsync(entry);
             await _context.SaveChangesAsync();

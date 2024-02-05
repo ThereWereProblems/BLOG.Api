@@ -40,7 +40,7 @@ namespace BLOG.Application.Features.Post.Queries
 
         public async Task<Result<PostDetailResult>> Handle(PostGetQuery request, CancellationToken cancellationToken)
         {
-            var entry = _context.Posts.Include(v => v.User).FirstOrDefault(x => x.Id == request.Id);
+            var entry = await _context.Posts.Include(v => v.User).FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (entry == null)
             {

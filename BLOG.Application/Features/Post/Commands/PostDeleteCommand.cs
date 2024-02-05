@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLOG.Application.Caching;
 using BLOG.Application.Common.Abstractions;
+using BLOG.Application.Features.File.Commands;
 using BLOG.Application.Result;
 using BLOG.Domain.DTO;
 using BLOG.Domain.Model.ApplicationUser;
@@ -54,11 +55,13 @@ namespace BLOG.Application.Features.Post.Commands
             if (entry == null)
                 return Result<bool>.NotFound();
 
-            if (entry.UserId != _userService.UserId)
+            if (!(entry.UserId == _userService.UserId || _userService.IsAdmin))
                 return Result<bool>.Forbidden();
 
             _context.Posts.Remove(entry);
             await _context.SaveChangesAsync();
+
+            await _mediator.Send(new ImageDeleteCommand { FileName = entry.Image });
 
             return Result<bool>.Success(true);
         }

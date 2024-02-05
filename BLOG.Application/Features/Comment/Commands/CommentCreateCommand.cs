@@ -8,6 +8,7 @@ using BLOG.Domain.DTO;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +54,11 @@ namespace BLOG.Application.Features.Comment.Commands
 
         public async Task<Result<int>> Handle(CommentCreateCommand request, CancellationToken cancellationToken)
         {
+            var post = await _context.Posts.FirstOrDefaultAsync(x => x.Id == request.CommentDTO.PostId);
+
+            if (post == null)
+                return Result<int>.Invalid("Post o podanym Id nie istnieje!");
+
             var entry = _mapper.Map<Domain.Model.Comment.Comment>(request.CommentDTO);
 
             entry.UserId = _userService.UserId;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLOG.Application.Caching;
 using BLOG.Application.Common.Abstractions;
+using BLOG.Application.Features.File.Commands;
 using BLOG.Application.Result;
 using BLOG.Domain.DTO;
 using BLOG.Domain.Model.ApplicationUser;
@@ -19,7 +20,7 @@ namespace BLOG.Application.Features.Post.Commands
     public class PostUpdateCommand : IRequest<Result<bool>>, ICacheCleanCommand
     {
         public int Id { get; set; }
-
+        public IFormFile File { get; set; }
         public CreatePostDTO PostDTO { get; set; }
 
         public string CacheGroup => $"{nameof(Domain.Model.Post.Post)}";
@@ -67,8 +68,19 @@ namespace BLOG.Application.Features.Post.Commands
             if (entry == null)
                 return Result<bool>.NotFound();
 
-            if(entry.UserId != _userService.UserId)
+            if (!(entry.UserId == _userService.UserId || _userService.IsAdmin))
                 return Result<bool>.Forbidden();
+
+            var imageToDelete = entry.Image;
+            if (request.File != null)
+            {
+                var result = await _mediator.Send(new ImageCreateCommand { File = request.File });
+
+                if (!result.IsSuccess)
+                    return Result<bool>.Error(result.Errors.First());
+
+                entry.Image = result.Value;
+            }
 
             entry.Title = request.PostDTO.Title;
             entry.Description = request.PostDTO.Description;
@@ -76,6 +88,9 @@ namespace BLOG.Application.Features.Post.Commands
 
             _context.Posts.Update(entry);
             await _context.SaveChangesAsync();
+
+            if (request.File != null)
+                await _mediator.Send(new ImageDeleteCommand { FileName = imageToDelete });
 
             return Result<bool>.Success(true);
         }

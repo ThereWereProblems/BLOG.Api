@@ -1,0 +1,44 @@
+[
+  {
+    "Id": 1,
+    "Content": "Super",
+    "PublishedAt": "2024-01-10 00:40:18.9036758",
+    "PostId": 1,
+    "UserId": "48a1f000-7047-41ce-9b63-c9ba458487d5"
+  },
+  {
+    "Id": 2,
+    "Content": "Wow",
+    "PublishedAt": "2024-01-17 01:01:13.4173023",
+    "PostId": 1,
+    "UserId": "0905d455-2eb2-46ba-b596-7ecad6b61fec"
+  },
+  {
+    "Id": 3,
+    "Content": "No nieźle",
+    "PublishedAt": "2024-01-17 01:03:52.6805877",
+    "PostId": 2,
+    "UserId": "48a1f000-7047-41ce-9b63-c9ba458487d5"
+  },
+  {
+    "Id": 4,
+    "Content": "Tylko na to czekałem",
+    "PublishedAt": "2024-01-17 01:03:52.6805877",
+    "PostId": 2,
+    "UserId": "0905d455-2eb2-46ba-b596-7ecad6b61fec"
+  },
+  {
+    "Id": 5,
+    "Content": "Kozak",
+    "PublishedAt": "2024-01-18 00:09:30.9208814",
+    "PostId": 3,
+    "UserId": "48a1f000-7047-41ce-9b63-c9ba458487d5"
+  },
+  {
+    "Id": 6,
+    "Content": "Takie tam",
+    "PublishedAt": "2024-01-18 00:26:13.9124926",
+    "PostId": 3,
+    "UserId": "0905d455-2eb2-46ba-b596-7ecad6b61fec"
+  }
+]

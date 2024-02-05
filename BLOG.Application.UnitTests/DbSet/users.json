@@ -1,0 +1,30 @@
+[
+  {
+    "Id": "9baf84a0-f581-4606-afda-4537a8da5a7d",
+    "UserName": "admin@test.com",
+    "Email": "admin@test.com",
+    "NormalizedEmail": "ADMIN@TEST.COM",
+    "NickName": "Admin"
+  },
+  {
+    "Id": "48a1f000-7047-41ce-9b63-c9ba458487d5",
+    "UserName": "user@example.com",
+    "Email": "user@example.com",
+    "NormalizedEmail": "USER@EXAMPLE.COM",
+    "NickName": "Dawid"
+  },
+  {
+    "Id": "b1bcfaf2-3164-4f11-a179-a15990a3c92f",
+    "UserName": "user2@example.com",
+    "Email": "user2@example.com",
+    "NormalizedEmail": "USER3@EXAMPLE.COM",
+    "NickName": "dawid002"
+  },
+  {
+    "Id": "0905d455-2eb2-46ba-b596-7ecad6b61fec",
+    "UserName": "user3@example.com",
+    "Email": "user3@example.com",
+    "NormalizedEmail": "USER3@EXAMPLE.COM",
+    "NickName": "sadasd"
+  }
+]
