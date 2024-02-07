@@ -22,8 +22,8 @@ builder.Configuration.SetBasePath(Directory.GetCurrentDirectory())
 
 try
 {
-    builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
-        loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
+    //builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+    //    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
 
     builder.Services.AddInfrastructureLayer(builder.Configuration);
@@ -72,7 +72,7 @@ try
 
     var app = builder.Build();
 
-    app.UseSerilogRequestLogging();
+    //app.UseSerilogRequestLogging();
 
     await ApplicationDbContextSeed.SeedAsync(app);
 
