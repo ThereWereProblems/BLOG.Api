@@ -1,6 +1,7 @@
 ﻿using BLOG.Application.Common.Abstractions;
 using BLOG.Domain.Model.ApplicationUser;
 using BLOG.Domain.Model.AuditLog;
+using BLOG.Infrastructure.Persistance.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -45,7 +46,16 @@ namespace BLOG.Infrastructure.Persistance
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
+            modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
+            modelBuilder.ApplyConfiguration(new CommentConfiguration());
+            modelBuilder.ApplyConfiguration(new IdentityRoleClaimConfiguration());
+            modelBuilder.ApplyConfiguration(new IdentityRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new IdentityUserClaimConfiguration());
+            modelBuilder.ApplyConfiguration(new IdentityUserLoginConfiguration());
+            modelBuilder.ApplyConfiguration(new IdentityUserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new IdentityUserTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new PostConfiguration());
 
             OnModelCreatingPartial(modelBuilder);
         }
