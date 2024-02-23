@@ -29,5 +29,9 @@ The `SaveChangesAsync` method has been overwritten in the context to save change
 * PerformanceBehavior - Logging if request is processed to long
 * CacheBehavior - Memory cache
 
+#### `Cross-Origin` requests have been set in the application to accept requests only from `localhost:4200`.
+Additionally, `CommunicationServiceClient` has been implemented for communication between the `Server` and the `frontend application` using `SignalR`.
+
 ## Important
+#### The project uses many more mechanisms (e.g. AppResult to return result from Application layer to Api layer, UserService, seeder, etc.) so I encourage you to review the code.
 #### The project dont use the repository pattern so after move database model configuration to separate files, tests stopped working beouse i'm used SQL Lite to make fake database. SQL Lite dont support nvarchar what make errors.
